@@ -1,96 +1,96 @@
 <div class="missionlist-wrapper">
-    <div class="filters">
-      <input
-        type="number"
-        [(ngModel)]="filters.year"
-        (ngModelChange)="applyFilters()"
-        placeholder="e.g. 2020"
-      />
+
+    <mat-card class="filters" style="margin-bottom: 2rem;padding: 50px;">
+      <mat-form-field appearance="outline" color="accent" style="width: 200px;">
+        <mat-label>Launch Year</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="filters.year"
+          (ngModelChange)="applyFilters()"
+          placeholder="e.g. 2020"
+        />
+      </mat-form-field>
   
-      <div>
+      <div style="margin: 1rem 0;">
         <strong>Launch:</strong>
-        <label>
-          <input
-            type="radio"
-            name="launch"
-            [(ngModel)]="filters.launchSuccess"
-            [value]="true"
-            (ngModelChange)="applyFilters()"
-          />
-          Successful
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="launch"
-            [(ngModel)]="filters.launchSuccess"
-            [value]="false"
-            (ngModelChange)="applyFilters()"
-          />
-          Failed
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="launch"
-            [(ngModel)]="filters.launchSuccess"
-            [value]="null"
-            (ngModelChange)="applyFilters()"
-          />
-          All
-        </label>
+        <mat-radio-group [(ngModel)]="filters.launchSuccess" (change)="applyFilters()" style="display: flex; gap: 1rem;">
+          <mat-radio-button [value]="true">Successful</mat-radio-button>
+          <mat-radio-button [value]="false">Failed</mat-radio-button>
+          <mat-radio-button [value]="null">All</mat-radio-button>
+        </mat-radio-group>
       </div>
   
-      <div>
+      <div style="margin: 1rem 0;">
         <strong>Landing:</strong>
-        <label>
-          <input
-            type="radio"
-            name="landing"
-            [(ngModel)]="filters.landingSuccess"
-            [value]="true"
-            (ngModelChange)="applyFilters()"
-          />
-          Successful
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="landing"
-            [(ngModel)]="filters.landingSuccess"
-            [value]="false"
-            (ngModelChange)="applyFilters()"
-          />
-          Failed
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="landing"
-            [(ngModel)]="filters.landingSuccess"
-            [value]="null"
-            (ngModelChange)="applyFilters()"
-          />
-          All
-        </label>
+        <mat-radio-group [(ngModel)]="filters.landingSuccess" (change)="applyFilters()" style="display: flex; gap: 1rem;">
+          <mat-radio-button [value]="true">Successful</mat-radio-button>
+          <mat-radio-button [value]="false">Failed</mat-radio-button>
+          <mat-radio-button [value]="null">All</mat-radio-button>
+        </mat-radio-group>
       </div>
   
-      <button (click)="resetFilters()">Reset Filters</button>
-    </div>
+      <button mat-raised-button color="primary" (click)="resetFilters()">Reset Filters</button>
+    </mat-card>
   
     <div class="mission-grid">
-        <div *ngFor="let mission of missions" class="mission-card">
-          <img
-            [src]="mission.links?.mission_patch"
-            alt="{{ mission.mission_name }}"
-            width="100"
-          />
-          <h3>{{ mission.mission_name }}</h3>
-          <p><strong>Date:</strong> {{ mission.launch_date_utc | date: 'longDate' }}</p>
-          <p><strong>Rocket:</strong> {{ mission.rocket?.rocket_name }}</p>
-          <p><strong>Description:</strong> {{ mission.details }}</p>
-          <hr />
-        </div>
-      </div>
+      <mat-card
+        *ngFor="let mission of missions"
+        class="mission-card"
+        [routerLink]="['/missiondetails', mission.flight_number]"
+        style="cursor: pointer;"
+      >
+        <mat-card-header>
+          <mat-card-title>{{ mission.mission_name }}</mat-card-title>
+          <mat-card-subtitle>Flight #{{ mission.flight_number }} — {{ mission.launch_year }}</mat-card-subtitle>
+        </mat-card-header>
+  
+        <img
+        mat-card-image
+        [src]="mission.links?.mission_patch_small"
+        alt="{{ mission.mission_name }}"
+        style="max-width: 120px; height: auto; margin: 0 auto; display: block;"
+      />
+  
+        <mat-card-content>
+          <p><strong>Description:</strong> {{ mission.details || 'No details available.' }}</p>
+          <p><strong>Rocket Name:</strong> {{ mission.rocket?.rocket_name }}</p>
+          <p><strong>Rocket Type:</strong> {{ mission.rocket?.rocket_type }}</p>
+        </mat-card-content>
+  
+        <mat-card-actions>
+          <a
+            *ngIf="mission.links?.article_link"
+            [href]="mission.links.article_link"
+            target="_blank"
+            rel="noopener"
+            mat-button
+            (click)="$event.stopPropagation()"
+          >
+            Article
+          </a>
+          <a
+            *ngIf="mission.links?.wikipedia"
+            [href]="mission.links.wikipedia"
+            target="_blank"
+            rel="noopener"
+            mat-button
+            (click)="$event.stopPropagation()"
+          >
+            Wikipedia
+          </a>
+          <a
+            *ngIf="mission.links?.video_link"
+            [href]="mission.links.video_link"
+            target="_blank"
+            rel="noopener"
+            mat-button
+            (click)="$event.stopPropagation()"
+          >
+            Video
+          </a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
   </div>
   

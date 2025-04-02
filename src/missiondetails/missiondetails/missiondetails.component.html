@@ -1,1 +1,53 @@
-<p>missiondetails works!</p>
+<mat-card *ngIf="mission" class="mission-card">
+    <mat-card-header>
+      <mat-card-title>{{ mission.mission_name }}</mat-card-title>
+      <mat-card-subtitle>Flight #{{ mission.flight_number }} — {{ mission.launch_year }}</mat-card-subtitle>
+    </mat-card-header>
+  
+    <img
+      mat-card-image
+      [src]="mission.links?.mission_patch_small"
+      alt="Mission Patch"
+      style="max-width: 150px; margin: 0 auto; display: block;"
+    />
+  
+    <mat-card-content>
+      <p><strong>Details:</strong> {{ mission.details || 'No details available.' }}</p>
+      <p><strong>Launch Success:</strong> {{ mission.launch_success ? 'Yes' : 'No' }}</p>
+  
+      <h3>Rocket Info</h3>
+      <p><strong>Rocket Name:</strong> {{ mission.rocket?.rocket_name }}</p>
+      <p><strong>Rocket Type:</strong> {{ mission.rocket?.rocket_type }}</p>
+  
+      <h3>Links</h3>
+      <a
+        *ngIf="mission.links?.article_link"
+        [href]="mission.links.article_link"
+        target="_blank"
+        mat-button
+      >
+        Article
+      </a>
+      <a
+        *ngIf="mission.links?.wikipedia"
+        [href]="mission.links.wikipedia"
+        target="_blank"
+        mat-button
+      >
+        Wikipedia
+      </a>
+      <a
+        *ngIf="mission.links?.video_link"
+        [href]="mission.links.video_link"
+        target="_blank"
+        mat-button
+      >
+        Video
+      </a>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <button mat-stroked-button color="accent" routerLink="/">← Back</button>
+    </mat-card-actions>
+  </mat-card>
+  

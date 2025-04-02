@@ -2,59 +2,70 @@ import { Component, OnInit } from '@angular/core';
 import { SpacexapiService } from '../../network/spacexapi.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { SpaceXLaunch } from '../../models/mission';
+
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-missionlist',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatRadioModule,
+    MatButtonModule,
+  ],
   templateUrl: './missionlist.component.html',
-  styleUrls: ['./missionlist.component.css']
+  styleUrls: ['./missionlist.component.css'],
 })
 export class MissionListComponent implements OnInit {
-  missions: any[] = [];
-  allMissions: any[] = [];
+  missions: SpaceXLaunch[] = [];
 
-  filters = {
-    year: null as number | null,
-    launchSuccess: null as boolean | null,
-    landingSuccess: null as boolean | null
+  filters: {
+    year: number | null;
+    launchSuccess: boolean | null;
+    landingSuccess: boolean | null;
+  } = {
+    year: null,
+    launchSuccess: null,
+    landingSuccess: null,
   };
 
   constructor(private spacexService: SpacexapiService) {}
 
   ngOnInit(): void {
-    this.spacexService.getLaunches().subscribe(data => {
-      this.allMissions = data;
-      this.applyFilters();
-    });
+    this.applyFilters();
   }
 
   applyFilters(): void {
-    console.log('Applying filters:', this.filters);
-  
-    this.missions = this.allMissions.filter(mission => {
-      const launchYear = new Date(mission.launch_date_utc).getFullYear();
-      const launchSuccess = mission.launch_success;
-      const landingSuccess = mission.rocket?.first_stage?.cores[0]?.land_success ?? null;
-  
-      const yearMatches =
-        this.filters.year === null || launchYear === this.filters.year;
-      const launchMatches =
-        this.filters.launchSuccess === null || launchSuccess === this.filters.launchSuccess;
-      const landingMatches =
-        this.filters.landingSuccess === null || landingSuccess === this.filters.landingSuccess;
-  
-      return yearMatches && launchMatches && landingMatches;
-    });
-  
-    console.log('Filtered missions:', this.missions.length);  
+    console.log('Fetching with filters:', this.filters);
+
+    this.spacexService
+      .getLaunches({
+        launch_year: this.filters.year ?? undefined,
+        launch_success: this.filters.launchSuccess ?? undefined,
+        land_success: this.filters.landingSuccess ?? undefined,
+      })
+      .subscribe((data: SpaceXLaunch[]) => {
+        this.missions = data;
+        console.log('Fetched missions:', this.missions.length);
+      });
   }
 
   resetFilters(): void {
     this.filters = {
       year: null,
       launchSuccess: null,
-      landingSuccess: null
+      landingSuccess: null,
     };
     this.applyFilters();
   }
