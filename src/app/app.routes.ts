@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { MissionListComponent } from '../missionlist/missionlist/missionlist.component';
+import { MissionListComponent } from './missionlist/missionlist/missionlist.component';
+
 
 export const routes: Routes = [
   {
@@ -8,6 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'missiondetails/:id',
-    loadComponent: () => import('../missiondetails/missiondetails/missiondetails.component').then(m => m.MissionDetailsComponent)
+    loadComponent: () => import('./missiondetails/missiondetails.component').then(m => m.MissionDetailsComponent),
+    
   }
 ];

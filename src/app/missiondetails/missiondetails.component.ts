@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { SpacexapiService } from '../../network/spacexapi.service';
+import { SpacexapiService } from '../network/spacexapi.service';
 import { CommonModule } from '@angular/common';
-import { SpaceXLaunch } from '../../models/mission';
+import { SpaceXLaunch } from '../models/mission';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 
