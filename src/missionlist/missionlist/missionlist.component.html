@@ -1,0 +1,96 @@
+<div class="missionlist-wrapper">
+    <div class="filters">
+      <input
+        type="number"
+        [(ngModel)]="filters.year"
+        (ngModelChange)="applyFilters()"
+        placeholder="e.g. 2020"
+      />
+  
+      <div>
+        <strong>Launch:</strong>
+        <label>
+          <input
+            type="radio"
+            name="launch"
+            [(ngModel)]="filters.launchSuccess"
+            [value]="true"
+            (ngModelChange)="applyFilters()"
+          />
+          Successful
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="launch"
+            [(ngModel)]="filters.launchSuccess"
+            [value]="false"
+            (ngModelChange)="applyFilters()"
+          />
+          Failed
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="launch"
+            [(ngModel)]="filters.launchSuccess"
+            [value]="null"
+            (ngModelChange)="applyFilters()"
+          />
+          All
+        </label>
+      </div>
+  
+      <div>
+        <strong>Landing:</strong>
+        <label>
+          <input
+            type="radio"
+            name="landing"
+            [(ngModel)]="filters.landingSuccess"
+            [value]="true"
+            (ngModelChange)="applyFilters()"
+          />
+          Successful
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="landing"
+            [(ngModel)]="filters.landingSuccess"
+            [value]="false"
+            (ngModelChange)="applyFilters()"
+          />
+          Failed
+        </label>
+        <label>
+          <input
+            type="radio"
+            name="landing"
+            [(ngModel)]="filters.landingSuccess"
+            [value]="null"
+            (ngModelChange)="applyFilters()"
+          />
+          All
+        </label>
+      </div>
+  
+      <button (click)="resetFilters()">Reset Filters</button>
+    </div>
+  
+    <div class="mission-grid">
+        <div *ngFor="let mission of missions" class="mission-card">
+          <img
+            [src]="mission.links?.mission_patch"
+            alt="{{ mission.mission_name }}"
+            width="100"
+          />
+          <h3>{{ mission.mission_name }}</h3>
+          <p><strong>Date:</strong> {{ mission.launch_date_utc | date: 'longDate' }}</p>
+          <p><strong>Rocket:</strong> {{ mission.rocket?.rocket_name }}</p>
+          <p><strong>Description:</strong> {{ mission.details }}</p>
+          <hr />
+        </div>
+      </div>
+  </div>
+  
